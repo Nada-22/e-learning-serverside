@@ -35,11 +35,11 @@ const userSchema=mongoose.Schema({
     },
     age:{
         type:Number,
-        requied:true
+        // requied:true
     },
     phone:{
         type:String,
-        requied:true,
+        // requied:true,
         validate(value){
             if(!validator.isMobilePhone(value,['ar-EG']))
                 throw new Error('Please enter egyption phone number !')
@@ -47,7 +47,7 @@ const userSchema=mongoose.Schema({
     },
     country:{
         type:String,
-        requied:true,
+        // requied:true,
         trim:true,
         minLength:3
     },
@@ -115,7 +115,7 @@ userSchema.methods.toJSON=function(){
     const userObject=user.toObject()
 
     delete userObject.password
-    delete userObject.tokens
+    // delete userObject.tokens
     return userObject
 }
 
