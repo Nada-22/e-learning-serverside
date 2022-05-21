@@ -87,7 +87,7 @@ router.get('/user/getallcourses',auth,async(req,res)=>{
         res.status(200).send(await Promise.all(array))
     }
     catch(e){
-        res.status(500).send(e.message)
+        res.status(500).send(e)
     }
 })
 
@@ -226,7 +226,7 @@ router.get('/user/SearchByCourseName/:name',auth,async(req,res)=>{
 
 })
 
-router.get('/user/SearchByCourseCat/:Cat',auth,async(req,res)=>{
+router.get('/courses/SearchByCourseCat/:Cat',async(req,res)=>{
     try{
         const courses= await Courses.find({category:req.params.Cat})
         if(!courses)
