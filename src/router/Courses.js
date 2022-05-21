@@ -7,9 +7,9 @@ const Courses=require('../model/courses')
 
 
 const uploads=multer({
-    limits:{
-        fileSize:1000000
-    },
+    // limits:{
+    //     // fileSize:1000000
+    // },
     fileFilter(req,file,cb){
         if(!file.originalname.match(/\.(jpg|jpeg|png|jfif)$/))
             return cb(new Error('please upload image !'))
@@ -27,7 +27,7 @@ router.post('/courses/Add',uploads.single("image"),async (req,res)=>{
         res.status(200).send(course)
     }
     catch(e){
-        res.status(500).send(e)
+        res.status(500).send(e.message)
     }
 })
 

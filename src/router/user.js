@@ -150,7 +150,11 @@ router.get('/user/:id', auth, async (req, res) => {
 // COURSES
 
 router.post('/user/AddCourse',auth,async(req,res)=>{
-    try{
+    try {
+        // console.log(req.user);
+        console.log("ass");
+        console.log(req.body);
+
         const courserObj=mongoose.Types.ObjectId(req.body.CourseID);
         const v=req.user.Courses.find(el=> el.courserObj==req.body.CourseID)
         if(!v){
@@ -178,7 +182,7 @@ router.post('/user/AddCourse',auth,async(req,res)=>{
         }    
     }
     catch(e){
-        res.status(500).send(e.message)
+        res.status(500).send(e)
     }
 })
 

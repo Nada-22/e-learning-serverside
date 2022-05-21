@@ -43,7 +43,13 @@ CoursesSchema.virtual('Reviews',{
     foreignField:'courseID'
 
 })
+CoursesSchema.methods.toJSON=function(){
+    const course=this
+    const courseObject=course.toObject()
 
+   
+    return courseObject
+}
 const Courses=mongoose.model('Courses',CoursesSchema)
 
 module.exports=Courses
