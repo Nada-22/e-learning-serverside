@@ -257,7 +257,7 @@ router.post('/user/addReview/:CourseID',auth,async(req,res)=>{
     }
 })
 
-router.get('/user/getCourseReviews/:courseID',auth,async(req,res)=>{
+router.get('/user/getCourseReviews/:courseID',async(req,res)=>{
     try{
         const courseID=req.params.courseID
         const course=await Courses.findById({_id:courseID})
