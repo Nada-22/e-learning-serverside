@@ -7,30 +7,15 @@ const Courses=require('../model/courses')
 
 
 const uploads=multer({
-    // limits:{
-    //     // fileSize:1000000
-    // },
+    limits:{
+        fileSize:1000000
+    },
     fileFilter(req,file,cb){
         if(!file.originalname.match(/\.(jpg|jpeg|png|jfif)$/))
             return cb(new Error('please upload image !'))
         cb(null,true)
     }
 })
-
-router.post('/courses/Add',uploads.single("image"),async (req,res)=>{
-    try{
-        const course=new Courses(req.body)
-        if(req.file){
-            course.image=req.file.buffer
-        }
-        await course.save()
-        res.status(200).send(course)
-    }
-    catch(e){
-        res.status(500).send(e.message)
-    }
-})
-
 router.get('/getAllCategoreies',async(req,res)=>{
     try{
         const arr=[];
@@ -46,6 +31,21 @@ router.get('/getAllCategoreies',async(req,res)=>{
         res.status(500).send(e);
     }
 })
+
+router.post('/courses/Add',uploads.single("image"),async (req,res)=>{
+    try{
+        const course=new Courses(req.body)
+        if(req.file){
+            course.image=req.file.buffer
+        }
+        await course.save()
+        res.status(200).send(course)
+    }
+    catch(e){
+        res.status(500).send(e)
+    }
+})
+
 
 
 module.exports=router

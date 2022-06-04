@@ -1,5 +1,6 @@
 const mongoose=require('mongoose')
 const Reviews=require('./reviews')
+const timestamps = require('mongoose-timestamp');
 
 const CoursesSchema=mongoose.Schema({
     name:{
@@ -12,8 +13,28 @@ const CoursesSchema=mongoose.Schema({
         required:true,
         trim:true
     },
+    description:{
+        type:String,
+        trim:true
+    },
+    instructor:{
+        type:String,
+        require:true,
+        trim:true
+    },
+    outline:{
+       type:String,
+       require:true,
+       trim:true
+    },
+
     playlist:[
         {
+            linkName:{
+                type:String,
+            require:true,
+            trim:true
+            },
             link:{
                 type:String,
                 trim:true
@@ -50,6 +71,7 @@ CoursesSchema.methods.toJSON=function(){
    
     return courseObject
 }
-const Courses=mongoose.model('Courses',CoursesSchema)
+CoursesSchema.plugin(timestamps)
 
+const Courses=mongoose.model('Courses',CoursesSchema)
 module.exports=Courses

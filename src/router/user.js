@@ -87,7 +87,7 @@ router.get('/user/getallcourses',auth,async(req,res)=>{
         res.status(200).send(await Promise.all(array))
     }
     catch(e){
-        res.status(500).send(e)
+        res.status(500).send(e.message)
     }
 })
 
@@ -127,13 +127,7 @@ router.delete('/user/delete',auth,async(req,res)=>{
     }
 })
 
-router.get('/user/:id', auth, async (req, res) => { 
-    // res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
-    // res.set({
-    //     "Access-Control-Allow-Origin": "*",
-    //     "Access-Control-Allow-Methods": "*",
-    //     "Access-Control-Allow-Headers": "'Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token'",
-    // });
+router.get('/user/:id',auth,async(req,res)=>{              
     try{
         const id=req.params.id
         const user=await User.findById(id)
@@ -150,11 +144,7 @@ router.get('/user/:id', auth, async (req, res) => {
 // COURSES
 
 router.post('/user/AddCourse',auth,async(req,res)=>{
-    try {
-        // console.log(req.user);
-        console.log("ass");
-        console.log(req.body);
-
+    try{
         const courserObj=mongoose.Types.ObjectId(req.body.CourseID);
         const v=req.user.Courses.find(el=> el.courserObj==req.body.CourseID)
         if(!v){
@@ -164,7 +154,9 @@ router.post('/user/AddCourse',auth,async(req,res)=>{
                 }
                 else{
                      const cousre=docs
+                     console.log(cousre)
                      cousre.noStudents++
+
                      await cousre.save()
                      const playlistIDs=[]
                      cousre.playlist?.forEach(link=>  {
@@ -182,7 +174,7 @@ router.post('/user/AddCourse',auth,async(req,res)=>{
         }    
     }
     catch(e){
-        res.status(500).send(e)
+        res.status(500).send(e.message)
     }
 })
 
@@ -229,7 +221,38 @@ router.get('/user/SearchByCourseName/:name',auth,async(req,res)=>{
     }
 
 })
+//search by course id
+router.get('/user/SearchByCourseID/:id',async(req,res)=>{
+    try{
+        const _id=req.params.id
+        const course= await Courses.findById(_id)
+        console.log(course)
+        if(!course)
+            return res.status(404).send("No Courses found !")
+        res.status(200).send(course)
+       
+    }
+    catch(e){
+        res.status(500).send(e.message)
+    }
 
+})
+//return naame and playlist
+router.get('/user/SearchByCourseplaylist/:id',async(req,res)=>{
+    try{
+        const _id=req.params.id
+        const course= await Courses.findById(_id)
+       
+        if(!course)
+            return res.status(404).send("No Courses found !")
+        res.status(200).send({...course.playlist,instructorName:course.instructor,name:course.name,category:course.category ,time:course.createdAt})
+       
+    }
+    catch(e){
+        res.status(500).send(e.message)
+    }
+
+})
 router.get('/courses/SearchByCourseCat/:Cat',async(req,res)=>{
     try{
         const courses= await Courses.find({category:req.params.Cat})
@@ -257,7 +280,7 @@ router.post('/user/addReview/:CourseID',auth,async(req,res)=>{
     }
 })
 
-router.get('/user/getCourseReviews/:courseID',async(req,res)=>{
+router.get('/user/getCourseReviews/:courseID',auth,async(req,res)=>{
     try{
         const courseID=req.params.courseID
         const course=await Courses.findById({_id:courseID})
@@ -289,6 +312,7 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
                return c
             }  
         })
+        //console.log(check.length)
         if(check.length==0)
           return res.status(404).send("you must enroll to course berfore rating !!")
 
@@ -299,19 +323,29 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
                if(c.rate)
                 {
                     let CourseRate=course.courseRate*course.noRates
+                    console.log('CourseRate= ',CourseRate)
+
                     let userRate=c.rate
+                    console.log('OldUserRate= ',userRate)
+
                     CourseRate=CourseRate-userRate
+                    console.log('CourseRate= -() ',CourseRate)
                     c.rate=req.body.rate
                     CourseRate=(CourseRate+c.rate)/course.noRates
+                    console.log('last CourseRate= ',CourseRate)
+
                     course.courseRate=CourseRate
+                   // c.rate=req.body.rate
                     course.save()
                 }
                 
               else{ 
                    c.rate=req.body.rate
                    const n=course.courseRate*course.noRates
-                   course.noRates++
-                   course.courseRate=(n+c.rate)/course.noRates
+                   console.log(n)
+                course.noRates++
+               //const rateValue=course.courseRate*course.noRates
+                course.courseRate=(n+c.rate)/course.noRates
                
                 course.save()}
               }
@@ -325,17 +359,6 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
     }
 })
 
-router.get('/getCourseRate/:id',auth,async (req,res)=>{
-    try{
-        const id=req.params.id;
-        const course=await Courses.findById(id)
-        if(course)
-            return res.status(200).send({courseRate:course.courseRate.toString()})
-        res.status(404).send('Not Found')
-    }
-    catch(e){
-        res.status(500).send(e)
-    }
-})
+
 module.exports=router
 

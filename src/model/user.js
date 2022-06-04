@@ -22,6 +22,16 @@ const userSchema=mongoose.Schema({
                 throw new Error('Please enter validate email !!')
         }
     },
+    birthdate:{
+       type:String,
+       trim:true
+    },
+    socialLinks:[
+        {
+         type:String,
+         trim:true
+        }
+    ],
     password:{
         type:String,
         required:true,
@@ -35,11 +45,11 @@ const userSchema=mongoose.Schema({
     },
     age:{
         type:Number,
-        // requied:true
+        requied:true
     },
     phone:{
         type:String,
-        // requied:true,
+        
         validate(value){
             if(!validator.isMobilePhone(value,['ar-EG']))
                 throw new Error('Please enter egyption phone number !')
@@ -47,7 +57,7 @@ const userSchema=mongoose.Schema({
     },
     country:{
         type:String,
-        // requied:true,
+       
         trim:true,
         minLength:3
     },
@@ -73,10 +83,10 @@ const userSchema=mongoose.Schema({
         }],
           rate:{
           type:Number,
-          default:0,
+         //default:0,
           validate(value){
-            if(! (value=>1 && value<=5))
-                throw new Error("value must be betweeen 1-4")
+            if( !(value>=1 && value<=5) ){
+                throw new Error("value must be betweeen 1-4") }
         }
         }
       }]
@@ -115,7 +125,7 @@ userSchema.methods.toJSON=function(){
     const userObject=user.toObject()
 
     delete userObject.password
-    // delete userObject.tokens
+ //   delete userObject.tokens
     return userObject
 }
 
