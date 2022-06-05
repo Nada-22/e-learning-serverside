@@ -246,7 +246,7 @@ router.get('/user/SearchByCourseplaylist/:id',async(req,res)=>{
        
         if(!course)
             return res.status(404).send("No Courses found !")
-        res.status(200).send({...course.playlist,instructorName:course.instructor,name:course.name,category:course.category ,time:course.createdAt})
+        res.status(200).send({playlist:course.playlist,instructorName:course.instructor,name:course.name,category:course.category ,time:course.createdAt})
        
     }
     catch(e){
@@ -294,6 +294,7 @@ router.get('/user/getCourseReviews/:courseID',auth,async(req,res)=>{
         {return await Reviews.findById(id)});
     
         res.status(200).send(await Promise.all(reviews))
+        
     }
     catch(e){
         res.status(500).send(e)
