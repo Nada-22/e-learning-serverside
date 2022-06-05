@@ -4,6 +4,7 @@ const User=require('../model/user')
 const multer=require('multer')
 const auth=require('../middleware/auth')
 
+
 const mongoose=require('mongoose')
 
 const Courses=require('../model/courses')
@@ -154,7 +155,7 @@ router.post('/user/AddCourse',auth,async(req,res)=>{
                 }
                 else{
                      const cousre=docs
-                     console.log(cousre)
+                    
                      cousre.noStudents++
 
                      await cousre.save()
@@ -359,6 +360,33 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
     }
 })
 
+//get 3top rate courses
+router.get('/course/topRate',async(req,res)=>{
+    try{
+        const course= await Courses.find().sort({courseRate:'desc'})
+        console.log(course)
+        const newObject = Object.assign({}, course)
+        res.send([course[0],course[1],course[2]])
+        //  let max=0
+        //  const top=[]
+      /* for(let i=0;i<course.length;i++){
+     /*  if(max< newObject[i].courseRate){
+           max= newObject[i].courseRate
+            top.push(newObject[i])
+          
+        /*  if( newObject[i+1].courseRate>max){
+             max= newObject[i+1].CourseRate
+            
+           }  
+          }
+      
+       }*/
+        
+    }
+    catch(e){
+        res.status(400).send(e)
+    }
+})
 
 module.exports=router
 

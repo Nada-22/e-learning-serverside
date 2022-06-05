@@ -23,7 +23,7 @@ const userSchema=mongoose.Schema({
         }
     },
     birthdate:{
-       type:String,
+       type:Date,
        trim:true
     },
     socialLinks:[
