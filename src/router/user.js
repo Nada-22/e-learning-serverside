@@ -46,7 +46,7 @@ router.post('/user/login',async(req,res)=>{
         res.status(200).send(user)
     }
     catch(e){
-        res.status(500).send(e.message)
+        res.status(500).send(e)
     }
 })
 
@@ -175,7 +175,7 @@ router.post('/user/AddCourse',auth,async(req,res)=>{
         }    
     }
     catch(e){
-        res.status(500).send(e.message)
+        res.status(500).send(e)
     }
 })
 
@@ -202,7 +202,7 @@ router.delete('/user/deleteCourse',auth,async(req,res)=>{
         }
 
         else{
-            res.status(404).send("Course isnt exist!")
+            res.status(404).send("Course is'nt exist!")
         }
     }
     catch(e){
@@ -250,7 +250,7 @@ router.get('/user/SearchByCourseplaylist/:id',async(req,res)=>{
        
     }
     catch(e){
-        res.status(500).send(e.message)
+        res.status(500).send(e)
     }
 
 })
@@ -270,9 +270,10 @@ router.get('/courses/SearchByCourseCat/:Cat',async(req,res)=>{
 router.post('/user/addReview/:CourseID',auth,async(req,res)=>{
     try{
         const UserID=req.user._id
+        const UserName=req.user.name
         const courseID=req.params.CourseID
 
-        const review=new Reviews({courseID,UserID,comment:req.body.comment})
+        const review=new Reviews({courseID,UserID,UserName,comment:req.body.comment})
         await review.save()
         res.status(200).send(review)
     }
@@ -357,7 +358,7 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
         res.status(200).send(req.user)
     }
     catch(e){
-        res.status(500).send(e.message)
+        res.status(500).send(e)
     }
 })
 
