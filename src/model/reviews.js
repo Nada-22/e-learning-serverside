@@ -17,6 +17,11 @@ const reviewsSchems=mongoose.Schema({
         required:true,
         //ref:Users
     },
+    UserName:{
+        type:mongoose.Schema.Types.String,
+      require:true
+
+    },
     comment:{
         type:String,
         required:true,
