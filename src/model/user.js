@@ -43,17 +43,14 @@ const userSchema=mongoose.Schema({
         }
 
     },
-    age:{
-        type:Number,
-        requied:true
-    },
+   
     phone:{
         type:String,
         
-        validate(value){
-            if(!validator.isMobilePhone(value,['ar-EG']))
-                throw new Error('Please enter egyption phone number !')
-        }
+        // validate(value){
+        //     // if(!validator.isMobilePhone(value,['ar-EG']))
+        //     //     throw new Error('Please enter egyption phone number !')
+        // }
     },
     country:{
         type:String,
