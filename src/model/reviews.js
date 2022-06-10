@@ -25,7 +25,7 @@ const reviewsSchems=mongoose.Schema({
 
     },
     UserImage:{
-        type:mongoose.Schema.Types.String,
+        type:mongoose.Schema.Types.Buffer,
       require:true
     },
     comment:{
@@ -40,7 +40,13 @@ reviewsSchems.plugin(timestamps)
 
 
 
-// reporter -- > news
+reviewsSchems.methods.toJSON=function(){
+    const review=this
+    const reviewObj=review.toObject()
+
+   
+    return reviewObj
+}
 
 
 const Reviews=mongoose.model("Reviews",reviewsSchems)

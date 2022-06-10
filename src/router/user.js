@@ -275,7 +275,7 @@ router.post('/user/addReview/:CourseID',auth,async(req,res)=>{
         const UserName=req.user.name
         const courseID=req.params.CourseID
         const UserImage=req.user.avatar
-
+        
         const review=new Reviews({courseID,UserID,UserName,UserImage,comment:req.body.comment})
         await review.save()
         res.status(200).send(review)
@@ -291,7 +291,8 @@ router.get('/user/getCourseReviews/:courseID',auth,async(req,res)=>{
         const course=await Courses.findById({_id:courseID})
 
         await course.populate('Reviews')
-
+  
+     
         const reviewsIDs=course.Reviews
 
         const reviews=await reviewsIDs.map(async (id) => 
