@@ -53,6 +53,7 @@ router.post('/user/login',async(req,res)=>{
 router.patch('/user/update',uploads.single('avatar'),auth,async(req,res)=>{
     try{
         const updates=Object.keys(req.body)
+
         updates.forEach(update=>{
             req.user[update]=req.body[update]
         })
@@ -272,8 +273,9 @@ router.post('/user/addReview/:CourseID',auth,async(req,res)=>{
         const UserID=req.user._id
         const UserName=req.user.name
         const courseID=req.params.CourseID
+        const UserImage=req.user.avatar
 
-        const review=new Reviews({courseID,UserID,UserName,comment:req.body.comment})
+        const review=new Reviews({courseID,UserID,UserName,UserImage,comment:req.body.comment})
         await review.save()
         res.status(200).send(review)
     }

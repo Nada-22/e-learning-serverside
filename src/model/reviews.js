@@ -7,6 +7,7 @@ const Courses=require('./courses')
 const Users=require('./user')
 
 const reviewsSchems=mongoose.Schema({
+    
     courseID:{
         type:mongoose.Schema.Types.ObjectId,
         required:true,
@@ -21,6 +22,10 @@ const reviewsSchems=mongoose.Schema({
         type:mongoose.Schema.Types.String,
       require:true
 
+    },
+    UserImage:{
+        type:mongoose.Schema.Types.String,
+      require:true
     },
     comment:{
         type:String,
