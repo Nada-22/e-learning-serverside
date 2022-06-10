@@ -82,14 +82,13 @@ router.get('/user/profile',auth,async(req,res)=>{
 
 router.get('/user/getallcourses',auth,async(req,res)=>{
     try{
-       // await User.populate("Courses") // 12316546546324684564  {key:v,key2:v2 }
        const array=await req.user.Courses.map(async (course) => 
           {return await Courses.findById(course.courserObj)}
         );
         res.status(200).send(await Promise.all(array))
     }
     catch(e){
-        res.status(500).send(e.message)
+        res.status(500).send(e)
     }
 })
 
@@ -167,12 +166,14 @@ router.post('/user/AddCourse',auth,async(req,res)=>{
                      })
                      req.user.Courses=req.user.Courses.concat({courserObj,playlistIDs})
                      await req.user.save()
-                     res.status(200).send(req.user)
+                    res.status(200).send(req.user)
                 }
             });
         }
         else{
             res.status(200).send("COURSE ALREADY EXISTS !!")
+           
+
         }    
     }
     catch(e){
@@ -228,7 +229,7 @@ router.get('/user/SearchByCourseID/:id',async(req,res)=>{
     try{
         const _id=req.params.id
         const course= await Courses.findById(_id)
-        console.log(course)
+        // console.log(course)
         if(!course)
             return res.status(404).send("No Courses found !")
         res.status(200).send(course)
@@ -328,16 +329,16 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
                if(c.rate)
                 {
                     let CourseRate=course.courseRate*course.noRates
-                    console.log('CourseRate= ',CourseRate)
+                    // console.log('CourseRate= ',CourseRate)
 
                     let userRate=c.rate
-                    console.log('OldUserRate= ',userRate)
+                    // console.log('OldUserRate= ',userRate)
 
                     CourseRate=CourseRate-userRate
-                    console.log('CourseRate= -() ',CourseRate)
+                    // console.log('CourseRate= -() ',CourseRate)
                     c.rate=req.body.rate
                     CourseRate=(CourseRate+c.rate)/course.noRates
-                    console.log('last CourseRate= ',CourseRate)
+                    // console.log('last CourseRate= ',CourseRate)
 
                     course.courseRate=CourseRate
                    // c.rate=req.body.rate
@@ -347,7 +348,7 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
               else{ 
                    c.rate=req.body.rate
                    const n=course.courseRate*course.noRates
-                   console.log(n)
+                //    console.log(n)
                 course.noRates++
                //const rateValue=course.courseRate*course.noRates
                 course.courseRate=(n+c.rate)/course.noRates
@@ -368,7 +369,7 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
 router.get('/course/topRate',async(req,res)=>{
     try{
         const course= await Courses.find().sort({courseRate:'desc'})
-        console.log(course)
+        // console.log(course)
         const newObject = Object.assign({}, course)
         res.send([course[0],course[1],course[2]])
         //  let max=0
