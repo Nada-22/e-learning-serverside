@@ -28,8 +28,27 @@ const userSchema=mongoose.Schema({
     },
     socialLinks:[
         {
-         type:String,
-         trim:true
+            Twitter:{
+                type:String,
+                trim:true
+            },
+            Facebook: {
+                type:String,
+                trim:true
+            },
+            Google: {
+                type: String,
+                trim:true
+            },
+            LinkedIn: {
+                type: String,
+                trim:true
+            },
+            GitHub: {
+                type: String,
+                trim:true
+            }
+            
         }
     ],
     password:{

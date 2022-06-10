@@ -31,7 +31,7 @@ const CoursesSchema=mongoose.Schema({
     playlist:[
         {
             linkName:{
-                type:String,
+            type:String,
             require:true,
             trim:true
             },
