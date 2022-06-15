@@ -181,12 +181,13 @@ router.post('/user/AddCourse',auth,async(req,res)=>{
     }
 })
 
-router.delete('/user/deleteCourse',auth,async(req,res)=>{
+router.delete('/user/deleteCourse/:id',auth,async(req,res)=>{
     try{
-        const courserObj=mongoose.Types.ObjectId(req.body.CourseID);
-        const v=req.user.Courses.find(el=> el.courserObj==req.body.CourseID)
+        const coursee=req.params.id
+        //const courserObj=mongoose.Types.ObjectId(req.body.CourseID);
+        const v=req.user.Courses.find(el=> el.courserObj==coursee)
         if(v){
-            Courses.findById(req.body.CourseID,async function (err, docs) {
+            Courses.findById(coursee,async function (err, docs) {
                 if (err){
                     throw Error()
                 }
@@ -197,10 +198,10 @@ router.delete('/user/deleteCourse',auth,async(req,res)=>{
                 }
             });
             req.user.Courses=req.user.Courses.filter(course=>{
-                return course.courserObj.toString()!=req.body.CourseID
+                return course.courserObj.toString()!=coursee
             })
             req.user.save()
-            res.status(200).send("Done")
+            res.status(200).send()
         }
 
         else{
@@ -275,8 +276,9 @@ router.post('/user/addReview/:CourseID',auth,async(req,res)=>{
         const UserName=req.user.name
         const courseID=req.params.CourseID
         const UserImage=req.user.avatar
-        
+      
         const review=new Reviews({courseID,UserID,UserName,UserImage,comment:req.body.comment})
+       
         await review.save()
         res.status(200).send(review)
     }
@@ -294,10 +296,13 @@ router.get('/user/getCourseReviews/:courseID',auth,async(req,res)=>{
   
      
         const reviewsIDs=course.Reviews
-
-        const reviews=await reviewsIDs.map(async (id) => 
-        {return await Reviews.findById(id)});
     
+      
+
+       const reviews=await reviewsIDs.map(async (id) => 
+       
+        {return await Reviews.findById(id) });
+ 
         res.status(200).send(await Promise.all(reviews))
         
     }

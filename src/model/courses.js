@@ -55,7 +55,9 @@ const CoursesSchema=mongoose.Schema({
     courseRate:{
         type:Number,
         default:0
-    }
+    },
+  
+
 })
 
 CoursesSchema.virtual('Reviews',{
