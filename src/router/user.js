@@ -82,13 +82,21 @@ router.get('/user/profile',auth,async(req,res)=>{
 
 router.get('/user/getallcourses',auth,async(req,res)=>{
     try{
-       const array=await req.user.Courses.map(async (course) => 
+        const course=req.user.Courses
+        console.log(course)
+      const array=await req.user.Courses.map(async (course) => 
           {return await Courses.findById(course.courserObj)}
         );
-        res.status(200).send(await Promise.all(array))
+
+    
+       res.status(200).send(await Promise.all(array))
+   
+       
+       
+   
     }
     catch(e){
-        res.status(500).send(e)
+        res.status(500).send(e.message)
     }
 })
 
@@ -325,7 +333,8 @@ router.post('/user/rateCourse/:id',auth,async (req,res)=>{
             }  
         })
         //console.log(check.length)
-        if(check.length==0)
+        const mine=req.user.Courses.find(el=>{return el.courserObj==course_id})
+        if(!mine)
           return res.status(404).send("you must enroll to course berfore rating !!")
 
         req.user.Courses=req.user.Courses.map(c=>{
